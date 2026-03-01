@@ -1,55 +1,46 @@
-# README Template
+# StyleSense: Fashion Forward Forecasting
 
-Below is a template provided for use when building your README file for students.
+### Data Science Product Recommendation Pipeline
 
-# Project Title
+## Project Overview
+StyleSense is a rapidly growing online women's clothing retailer. With a surge in new customers, a backlog of product reviews has emerged where the "Recommendation" indicator is missing. This project leverages historical review data—including text, numerical demographics, and product categories—to build a machine learning pipeline that predicts whether a customer would recommend a product.
 
-Project description goes here.
+## Dataset Summary
+The dataset contains 18,442 anonymized reviews with the following features:
 
-## Getting Started
+    - Textual: Title, Review Text (The primary source of sentiment).
+    - Numerical: Age, Positive Feedback Count.
+    - Categorical: Clothing ID, Division Name, Department Name, Class Name.
+    - Target: Recommended IND (1 = Recommended, 0 = Not Recommended).
 
-Instructions for how to get a copy of the project running on your local machine.
+## Key Findings & Challenges
+    - Class Imbalance: Approximately 81.5% of the data consists of positive recommendations. To address this, the final model was tuned using class_weight='balanced' and evaluated using F1-weighted scoring.
 
-### Dependencies
+    - Feature Variance: Positive Feedback Count showed high skewness (ranging from 0 to 122), requiring robust scaling within the pipeline.
 
-```
-Examples here
-```
+    - Text Insights: "Not Recommended" reviews tended to be slightly longer, suggesting dissatisfied customers provide more detailed critiques.
 
-### Installation
+## Model Pipeline Architecture
+The project utilizes a Scikit-Learn Pipeline combined with a ColumnTransformer to ensure clean, modular code and prevent data leakage:
 
-Step by step explanation of how to get a dev environment running.
+    1. Numerical Transformer: Applies StandardScaler to Age and Positive Feedback Count.
 
-List out the steps
+    2. Categorical Transformer: Applies OneHotEncoder to department and division names.
 
-```
-Give an example here
-```
+    3. Text Transformer: Utilizes TfidfVectorizer (NLP) to tokenize and vectorize the review text, removing English stop words.
 
-## Testing
+    4. Classifier: A RandomForestClassifier was fine-tuned to handle high-dimensional text data.
 
-Explain the steps needed to run any automated tests
+## Performance & Evaluation
+Through GridSearchCV, the model was optimized for the minority class.
 
-### Break Down Tests
+    - Initial Baseline: High accuracy (86%) but poor recall for negative reviews (0.36).
 
-Explain what each test does and why
+    - Fine-Tuned Model: Improved Recall for "Not Recommended" items to 0.68, providing StyleSense with a much more reliable tool for identifying customer dissatisfaction.
 
-```
-Examples here
-```
+## Files in Repository
+starter.ipynb: The primary Jupyter Notebook containing data exploration, pipeline construction, and model training.
 
-## Project Instructions
+data/reviews.csv: The anonymized dataset used for the project.
 
-This section should contain all the student deliverables for this project.
-
-## Built With
-
-* [Item1](www.item1.com) - Description of item
-* [Item2](www.item2.com) - Description of item
-* [Item3](www.item3.com) - Description of item
-
-Include all items used to build project.
-
-## License
-
-[License](LICENSE.txt)
+requirements.txt: List of necessary Python packages (scikit-learn, pandas, spacy, etc.).
